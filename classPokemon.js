@@ -1,17 +1,11 @@
-// Returns a JSON array where each element is a dict containing :
-// - base_attack,
-// - base_defense,
-// - base_stamina, 
-// - pokemon_ID,  
-// - pokemon name.
-
 class Pokemon { // nouvelle déclaration
-    constructor (name, id, attack, defense, stamina) {
+    constructor (name, id, attack, defense, stamina, normal) {
         this.pokemon_name = name;
         this.pokemon_id = id;
         this.base_attack = attack;
         this.base_defense = defense;
         this.base_stamina = stamina;
+        this.base_form = normal;
     }
     toString() { 
         return `${this.pokemon_name} 
