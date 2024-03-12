@@ -61,3 +61,17 @@ class Type {
         return Object.keys(this.all_types).join(', ');
     }
 }
+
+
+class Attack {
+    constructor(id, name, type, damage) {
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.damage = damage;
+    }
+
+    toString() {
+        return `${this.name} (ID: ${this.id}, Type: ${this.type}, Damage: ${this.damage})`;
+    }
+}
