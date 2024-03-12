@@ -13,5 +13,11 @@ class Pokemon { // nouvelle déclaration
         this.base_defense = defense;
         this.base_stamina = stamina;
     }
-    toString() { return `${this.nom} a un rayon de ${this.rayon}km` }
+    toString() { 
+        return `${this.pokemon_name} 
+        \nID : ${this.pokemon_id}
+        \nAttack : ${this.base_attack}
+        \nDefense : ${this.base_defense}
+        \nStamina : ${this.base_stamina}` 
+    }
 }
