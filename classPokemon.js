@@ -5,13 +5,14 @@
 // - pokemon_ID,  
 // - pokemon name.
 
-class Pokemon { 
+class Pokemon { // nouvelle déclaration
     constructor (name, id, attack, defense, stamina) {
         this.pokemon_name = name;
         this.pokemon_id = id;
         this.base_attack = attack;
         this.base_defense = defense;
         this.base_stamina = stamina;
+        this.base_form = normal;
     }
 
     // Méthode pour récupérer la liste des types (objets Type)
