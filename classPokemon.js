@@ -12,7 +12,7 @@ class Pokemon { // nouvelle déclaration
         this.base_attack = attack;
         this.base_defense = defense;
         this.base_stamina = stamina;
-        this.base_form = normal;
+        this.base_form = 'normal';
     }
 
     // Méthode pour récupérer la liste des types (objets Type)
