@@ -16,6 +16,7 @@ class Pokemon {
         this.base_stamina = stamina;
         this.types = [];
         this.attacks = [];
+        this.base_form = 'normal';
     }
 
     getTypes() {
