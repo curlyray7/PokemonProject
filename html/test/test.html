@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Pokémon</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: center;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        input#inputField {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 200px;
+            box-sizing: border-box; 
+        }
+
+
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 200px; 
+            box-sizing: border-box; 
+        }
+
+    </style>
+</head>
+<body>
+
+    
+    <script src="../data/pokemon.js"></script>
+    <script src="../data/pokemon_type.js"></script>
+    <script src="../data/type_effectiveness.js"></script>
+    <script src="../data/pokemon_moves.js"></script>
+    <script src="../data/fast_moves.js"></script>
+    <script src="../data/charged_moves.js"></script>
+    <script src="../data/cp_multiplier.js"></script>
+    <script src="../data/generation.js"></script>
+    <script src="../data/class_type.js"></script>
+    <script src="../data/class_pokemon.js"></script>
+    <script src="../data/class_attack.js"></script>
+    
+    <script src="test.js"></script>
+
+
+    <ul>
+        <li>
+            <button onclick="affichePokemons()">Affiche Pokemons</button>
+        </li>
+        <li>
+            <input type="text" id="inputField" placeholder="Saisissez la données voulue">
+        </li>
+        <li>
+            <button onclick="testPokemonsByType()">Test Pokemon by Types</button>
+        </li>
+        <li>
+            <button onclick="testPokemonsByAttack()">Test Pokemon by attack</button>
+        </li>
+        <li>
+            <button onclick="testAttacksByType()">Test attacks by type</button>
+        </li>
+        <li>
+            <button onclick="testSortPokemonByName()">Test sort pokemons by name</button>
+        </li>
+        <li>
+            <button onclick="testSortPokemonByStamina()">Test sort pokemons by stamina</button>
+        </li>
+        <li>
+            <button onclick="testWeakestEnemies()">Test Weakest Enemies</button>
+        </li>
+        <li>
+            <button onclick="testBestAttackTypesForEnemy()">Test best attack types for enemy</button>
+        </li>
+    </ul>
+
+    <script>
+
+        // Importe les données des Pokémon, attaques et types, et les organise dans des structures de données appropriées
+        function import_pokemon() {
+            const all_attacks = {}; // Objet contenant toutes les attaques
+            const all_types = {}; // Objet contenant tous les types
+            const all_pokemons = {}; // Objet contenant tous les Pokémon
+
+            // Crée des objets Attack à partir des données de charged_moves et fast_moves
+            for (let moveData of charged_moves) {
+                const attack = new Attack(moveData);
+                all_attacks[moveData.move_id] = attack;
+            }
+
+            for (let moveData of fast_moves) {
+                if (!all_attacks[moveData.move_id]) {
+                    const attack = new Attack(moveData);
+                    all_attacks[moveData.move_id] = attack;
+                }
+            }
+
+            // Crée des objets Type à partir des données de pokemon_types
+            for (let typeData of pokemon_types) {
+                if (typeData.form === "Normal") {
+                    for (let typeName of typeData.type) {
+                        const type = new Type(typeName);
+                        all_types[type.name] = type;
+                    }
+                }
+            }
+
+            // Crée des objets Pokemon à partir des données de pokemon et les associe aux types et attaques correspondants
+            for (let data of pokemon) {
+                if (data.form === "Normal") {
+                    const pokemon = new Pokemon(data);
+
+                    for (let typeData2 of pokemon_types) {
+                        if (typeData2.pokemon_id == data.pokemon_id) {
+                            for (let typeName2 of typeData2.type) {
+                                const type2 = new Type(typeName2);
+                                pokemon.types.push(type2); 
+                            }
+                            break; // Sort de la boucle une fois que les types sont ajoutés
+                        }
+                    }
+                    
+                    for (let moveData of pokemon_moves) {
+                        if (moveData.pokemon_id == pokemon.id && moveData.form ==  pokemon.form) {
+                            for (let attackName of moveData.charged_moves) {
+                                for (let moveData2 of charged_moves) {
+                                    if (attackName == moveData2.name){
+                                        const attack = new Attack(moveData2);
+                                        pokemon.charged_moves.push(attack);
+                                    }
+                                }
+                            }
+
+                            for (let attackName2 of moveData.fast_moves) {
+                                for (let moveData3 of fast_moves) {
+                                    if (attackName2 == moveData3.name){
+                                        const attack = new Attack(moveData3);
+                                        pokemon.fast_moves.push(attack);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    all_pokemons[data.pokemon_id] = pokemon; // Ajoute le Pokémon à l'objet contenant tous les Pokémon
+                }
+            }
+
+            // Retourne les données organisées
+            return { all_attacks, all_types, all_pokemons };
+        }
+
+        const all_pokemons = import_pokemon();
+
+    </script>
+</body>
+</html>
