@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémons v4</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body> 
+    <!-- Section filtres -->
+    <div id="filterSection">
+        <div>
+            <label for="generationFilter">Génération : </label>
+            <select id="generationFilter">
+                <option value="">Toutes</option>
+            </select>
+        </div> 
+        <div>
+            <label for="typeFilter">Type : </label>
+            <select id="typeFilter">
+                <option value="">Tous</option>
+            </select>
+        </div>  
+        <div>
+            <label for="nameFilter">Nom : </label>
+            <input type="text" id="nameFilter">
+        </div>
+    </div>
+
+    <table id="pokemonTable">
+        <tbody> 
+            <!-- Pokémon will be dynamically added here -->
+        </tbody>
+    </table>
+ 
+    <div id="pagination">
+        <button id="prevBtn" disabled>PREV</button>
+        <span id="pageInfo"></span>
+        <button id="nextBtn">NEXT</button>
+    </div> 
+
+    <!-- Chargement des scripts nécessaires pour l'application -->
+    <script src="script_v4.js"></script>
+    <script src="../data/pokemon.js"></script>
+    <script src="../data/pokemon_type.js"></script>
+    <script src="../data/type_effectiveness.js"></script>
+    <script src="../data/pokemon_moves.js"></script>
+    <script src="../data/fast_moves.js"></script>
+    <script src="../data/charged_moves.js"></script>
+    <script src="../data/cp_multiplier.js"></script>
+    <script src="../data/generation.js"></script>
+    <script src="../data/class_type.js"></script>
+    <script src="../data/class_pokemon.js"></script>
+    <script src="../data/class_attack.js"></script>
+
+    <script>
+
+        // Fonction pour importer les données des Pokémons, des attaques et des types
+
+        function import_pokemon() {
+            const all_attacks = {};
+
+            // Import des attaques chargées
+            for (let moveData of charged_moves) {
+                const attack = new Attack(moveData);
+                all_attacks[moveData.move_id] = attack;
+            }
+            // Import des attaques rapides
+            for (let moveData of fast_moves) {
+                if (!all_attacks[moveData.move_id]) {
+                    const attack = new Attack(moveData);
+                    all_attacks[moveData.move_id] = attack;
+                }
+            }
+            
+            // Import des types
+            const all_types = {};
+            for (let typeData of pokemon_types) {
+                if (typeData.form === "Normal") {
+                    for (let typeName of typeData.type) {
+                        const type = new Type(typeName);
+                        all_types[type.name] = type;
+                    }
+                }
+            }
+
+
+            const all_pokemons = {};
+            let cpt = 0;
+            // Import des Pokémons
+            for (let data of pokemon) {
+                const generationNumber = getGenerationNumberById(data.pokemon_id);
+
+                if (data.form === "Normal" && generationNumber != null) {
+                    const pokemon = new Pokemon(data, generationNumber);
+
+                    // Ajout des types du Pokémon
+                    for (let typeData2 of pokemon_types) {
+                        if (typeData2.pokemon_id == data.pokemon_id && cpt == 0) {
+                            cpt = 1;
+
+                            for (let typeName2 of typeData2.type) {
+                                const type2 = new Type(typeName2);
+                                pokemon.types.push(type2); 
+                            }
+                        }
+                    }
+                    cpt = 0;
+                    
+                    // Ajout des attaques du Pokémon
+                    for (let moveData of pokemon_moves) {
+
+                        if (moveData.pokemon_id == pokemon.id && moveData.form ==  pokemon.form) {
+
+                            for (let attackName of moveData.charged_moves) {
+
+                                for (let moveData2 of charged_moves) {
+                                    if (attackName == moveData2.name){
+                                        const attack = new Attack(moveData2);
+                                        pokemon.charged_moves.push(attack);
+                                    }
+                                }
+                                
+                            }
+
+                            for (let attackName2 of moveData.fast_moves) {
+                                for (let moveData3 of fast_moves) {
+                                    if (attackName2 == moveData3.name){
+                                        const attack = new Attack(moveData3);
+                                        pokemon.fast_moves.push(attack);
+                                    }
+                                }
+                                
+                            }
+                        }
+                    }
+
+                    all_pokemons[data.pokemon_id] = pokemon;
+                }
+            }
+
+            return { all_attacks, all_types, all_pokemons };
+        }
+
+        // Fonction pour obtenir le numéro de génération en fonction de l'ID
+        function getGenerationNumberById(pokemonId) {
+            for (const generationName in generation) {
+                const pokemonList = generation[generationName];
+                const foundPokemon = pokemonList.find(pokemon => pokemon.id === pokemonId);
+                if (foundPokemon) {
+                    return foundPokemon.generation_number;
+                }
+            }
+            return null; // Si l'ID n'est pas trouvé
+        }
+
+
+        const all_pokemons = import_pokemon();
+
+    </script>
+
+    <!-- Popup 1 -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img src="../images/logo_pokemon.png" id="logo_pokemon" alt="logo_pokemon"/>
+            <div class="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- Popup 2 -->
+    <div id="editModal2" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <img src="../images/logo_pokemon.png" id="logo_pokemon" alt="logo_pokemon"/>
+            <div class="modal-body-2"></div>
+        </div>
+    </div>
+
+    
+    <!-- Popup 3 -->
+    <div id="editModal3" class="modal" tabindex="-1">
+        <div class="modal-content">
+            <img src="../images/logo_pokemon.png" id="logo_pokemon" alt="logo_pokemon"/>
+            <div class="modal-body-3"></div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,377 @@
+table {
+    font-family: Arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+
+
+.ligne-a-cacher-td img {
+    max-width: 25px;
+    max-height: auto;
+    vertical-align: middle; /* Align the image vertically */
+    padding-left: 10px;
+}
+
+th, td {
+    border: 1px solid #07e107;
+    text-align: left;
+    padding: 8px;
+    font-size: 14px;
+    text-align: center;
+}
+
+
+td img {
+    max-width: 100px;
+    height: auto;
+    padding: 5px;
+}
+
+
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.header-cell, .entete-a-cacher {
+    background-color: #4CAF50;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.pokemon-img {
+    max-width: 50px;
+    max-height: 50px;
+}
+
+tr:hover {
+    background-color: #dde;
+}
+
+
+
+#pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    gap: 10px; 
+    background-color: #f0f0f0; 
+    border-radius: 5px; 
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 10px;
+    margin-top: 0.5px;
+    z-index: 1;
+
+}
+
+#prevBtn,
+#nextBtn {
+    padding: 8px 16px; 
+    background-color: #0074d9;
+    color: #ffffff;
+    border: none; 
+    border-radius: 3px; 
+    cursor: pointer;
+}
+
+#prevBtn:disabled,
+#nextBtn:disabled {
+    opacity: 0.5; 
+    cursor: not-allowed; 
+}
+
+
+
+/* Style pour les popups */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.5); /* Fond semi-transparent */
+}
+
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+
+.modal-content {
+    position: fixed;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 500px;
+    pointer-events: auto;
+    background-color: #f9f9f9;
+    background-clip: padding-box;
+    border: 1px solid #ddd;
+    border-radius: 0.3rem;
+    outline: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.modal-body {
+    text-align: center;
+    padding: 20px;
+    max-height: 600px;
+    overflow: auto;
+}
+
+
+.modal-body img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+.close {
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.attacks-container {
+    display: flex;
+    justify-content: space-between;
+}
+
+ul {
+    font-weight: bold;
+    display: table;
+    width: 100%;
+    text-align: left;
+}
+
+li {
+    display: table-row;
+    background-position: left center;
+    font-weight: lighter;
+    padding: 10px;
+    color: #333;
+    margin-top: 10px; /* Ajoute une marge supérieure de 10px aux éléments li */
+    white-space: nowrap;
+
+}
+
+li:hover {
+    background-color: #dde;
+}
+
+li span {
+    display: table-cell;
+    padding: 5px;
+}
+
+li::before {
+    content: "";
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url('../images/pokeball.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+
+li:last-child {
+    border-bottom: none;
+}
+
+.modal-body img {
+    width: 50%;
+    height: auto;
+}
+
+
+
+.modal-content-2, .modal-content-3 {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 500px;
+    pointer-events: auto;
+    background-color: #f9f9f9;
+    background-clip: padding-box;
+    border: 1px solid #ddd;
+    border-radius: 0.3rem;
+    outline: 0;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+
+}
+
+.modal-body-2, .modal-body-3 {
+    text-align: center;
+    padding: 20px;
+    max-height: 600px;
+    overflow: auto;
+}
+
+
+.modal-body-2 img, .modal-body-3 img {
+    max-width: 50%;
+    height: auto;
+    margin-bottom: 20px;
+}
+
+
+
+#logo_pokemon {
+    width: 60%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    padding-top: 30px;
+}
+
+.modal-body p {
+    font-size: 40px;
+    font-weight: bold;
+}
+
+
+#filterSection {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    row-gap: 10px;
+}
+
+#filterSection label {
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+#filterSection select,
+#filterSection input[type="text"] {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+#filterSection select {
+    width: 150px;
+}
+
+#filterSection input[type="text"] {
+    width: 200px;
+}
+
+th.header-sorted-asc {
+    background-color: #000 !important;
+    color: #fff !important;
+}
+
+th.header-sorted-desc {
+    background-color: #0000FF !important;
+    color: #fff !important;
+}
+
+
+/* Styles spécifiques pour les téléphones */
+@media screen and (max-width: 600px) {
+    
+    .entete-a-cacher {
+        display: none;
+    }
+
+    .ligne-a-cacher {
+        display: none;
+    }
+
+    
+    .modal-content {
+        max-width: 300px;
+        max-height: 550px;
+        font-size: 14px;
+        padding: 15px;
+    }
+
+    .modal-body p {
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+    ul {
+        font-size: 12px;
+    }
+
+    li {
+        padding: 0;
+        font-size: 12px;
+        white-space: nowrap;
+    }
+
+    
+
+    #filterSection {
+        padding: 5px;
+        margin-bottom: 5px;
+    }
+
+    #filterSection label {
+        margin-right: 5px;
+    }
+
+    #filterSection select,
+    #filterSection input[type="text"] {
+        padding: 2.5px;
+        border-radius: 2px;
+        font-size: 12px;
+    }
+
+    #filterSection select {
+        width: 75px;
+    }
+
+    #filterSection input[type="text"] {
+        width: 100px;
+    }
+
+    td img {
+        max-width: 50px;
+        height: auto;
+        padding: 1px;
+    }
+
+    .ligne-a-cacher-td img {
+        max-width: 10px;
+        max-height: auto;
+        padding-left: 1px;
+    }
+}

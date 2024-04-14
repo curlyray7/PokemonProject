@@ -7,7 +7,7 @@
 // - power,
 // - stamina_loss_scaler,
 // - type
-
+ 
 let fast_moves = [
     {
         "duration": 400,

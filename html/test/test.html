@@ -48,8 +48,8 @@
             padding: 8px;
             border-radius: 5px;
             border: 1px solid #ccc;
-            width: 200px;
-            box-sizing: border-box; 
+            width: 200px; /* Ajoutez cette ligne pour définir une largeur fixe */
+            box-sizing: border-box; /* Ajoutez cette ligne pour inclure le padding dans la largeur totale */
         }
 
 
@@ -61,30 +61,13 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
-            width: 200px; 
-            box-sizing: border-box; 
+            width: 200px; /* Ajoutez cette ligne pour définir une largeur fixe */
+            box-sizing: border-box; /* Ajoutez cette ligne pour inclure le padding dans la largeur totale */
         }
 
     </style>
 </head>
 <body>
-
-    
-    <script src="../data/pokemon.js"></script>
-    <script src="../data/pokemon_type.js"></script>
-    <script src="../data/type_effectiveness.js"></script>
-    <script src="../data/pokemon_moves.js"></script>
-    <script src="../data/fast_moves.js"></script>
-    <script src="../data/charged_moves.js"></script>
-    <script src="../data/cp_multiplier.js"></script>
-    <script src="../data/generation.js"></script>
-    <script src="../data/class_type.js"></script>
-    <script src="../data/class_pokemon.js"></script>
-    <script src="../data/class_attack.js"></script>
-    
-    <script src="test.js"></script>
-
-
     <ul>
         <li>
             <button onclick="affichePokemons()">Affiche Pokemons</button>
@@ -115,15 +98,26 @@
         </li>
     </ul>
 
+    <script src="../data/pokemon.js"></script>
+    <script src="../data/pokemon_type.js"></script>
+    <script src="../data/type_effectiveness.js"></script>
+    <script src="../data/pokemon_moves.js"></script>
+    <script src="../data/fast_moves.js"></script>
+    <script src="../data/charged_moves.js"></script>
+    <script src="../data/cp_multiplier.js"></script>
+    <script src="../data/generation.js"></script>
+
+    <script src="test.js"></script>
+    <script src="../data/class_type.js"></script>
+    <script src="../data/class_pokemon.js"></script>
+    <script src="../data/class_attack.js"></script>
+
     <script>
 
-        // Importe les données des Pokémon, attaques et types, et les organise dans des structures de données appropriées
-        function import_pokemon() {
-            const all_attacks = {}; // Objet contenant toutes les attaques
-            const all_types = {}; // Objet contenant tous les types
-            const all_pokemons = {}; // Objet contenant tous les Pokémon
 
-            // Crée des objets Attack à partir des données de charged_moves et fast_moves
+        function import_pokemon() {
+            const all_attacks = {};
+
             for (let moveData of charged_moves) {
                 const attack = new Attack(moveData);
                 all_attacks[moveData.move_id] = attack;
@@ -135,8 +129,9 @@
                     all_attacks[moveData.move_id] = attack;
                 }
             }
-
-            // Crée des objets Type à partir des données de pokemon_types
+            
+            
+            const all_types = {};
             for (let typeData of pokemon_types) {
                 if (typeData.form === "Normal") {
                     for (let typeName of typeData.type) {
@@ -146,23 +141,29 @@
                 }
             }
 
-            // Crée des objets Pokemon à partir des données de pokemon et les associe aux types et attaques correspondants
+
+            const all_pokemons = {};
+            let cpt = 0;
+
             for (let data of pokemon) {
                 if (data.form === "Normal") {
                     const pokemon = new Pokemon(data);
 
                     for (let typeData2 of pokemon_types) {
-                        if (typeData2.pokemon_id == data.pokemon_id) {
+                        if (typeData2.pokemon_id == data.pokemon_id && cpt == 0) {
+                            cpt = 1;
+
                             for (let typeName2 of typeData2.type) {
                                 const type2 = new Type(typeName2);
                                 pokemon.types.push(type2); 
                             }
-                            break; // Sort de la boucle une fois que les types sont ajoutés
                         }
                     }
+                    cpt = 0;
                     
                     for (let moveData of pokemon_moves) {
                         if (moveData.pokemon_id == pokemon.id && moveData.form ==  pokemon.form) {
+
                             for (let attackName of moveData.charged_moves) {
                                 for (let moveData2 of charged_moves) {
                                     if (attackName == moveData2.name){
@@ -170,6 +171,7 @@
                                         pokemon.charged_moves.push(attack);
                                     }
                                 }
+                                
                             }
 
                             for (let attackName2 of moveData.fast_moves) {
@@ -179,19 +181,77 @@
                                         pokemon.fast_moves.push(attack);
                                     }
                                 }
+                                
                             }
                         }
                     }
 
-                    all_pokemons[data.pokemon_id] = pokemon; // Ajoute le Pokémon à l'objet contenant tous les Pokémon
+                    all_pokemons[data.pokemon_id] = pokemon;
                 }
             }
 
-            // Retourne les données organisées
             return { all_attacks, all_types, all_pokemons };
         }
 
+
         const all_pokemons = import_pokemon();
+
+        function affichePokemons() {
+            console.log(all_pokemons);
+        }
+
+        function testPokemonsByType() {
+            const inputFieldType = document.getElementById('inputField');
+            const type = inputFieldType.value;
+            console.log(`Pokémons de type ${type} :`);
+            const Pokemons = getPokemonsByType(type);
+            console.table(Pokemons);
+        }
+
+        function testPokemonsByAttack() {
+            const inputFieldAttaque = document.getElementById('inputField');
+            const attaque = inputFieldAttaque.value;
+            console.log(`Pokémons avec l'attaque ${attaque} :`);
+            const Pokemons = getPokemonsByAttack(attaque);
+            console.table(Pokemons);
+        }
+        
+        function testAttacksByType() {
+            const inputFieldTypeAttaque = document.getElementById('inputField');
+            const type = inputFieldTypeAttaque.value;
+            console.log(`Attaques de type ${type} :`);
+            const attacks = getAttacksByType(type);
+            console.table(attacks);
+        }
+
+        function testSortPokemonByName() {
+            console.log(`Pokemons triés  par nom :`);
+            const Pokemons = sortPokemonByName();
+            console.table(Pokemons);
+        }
+        
+        function testSortPokemonByStamina() {
+            console.log(`Pokemons triés  par stamina :`);
+            const Pokemons = sortPokemonByStamina();
+            console.table(Pokemons);
+        }
+        
+
+        function testWeakestEnemies() {
+            const inputFieldWeakest = document.getElementById('inputField');
+            const pokemonName = inputFieldWeakest.value;
+            console.log(`Test Weakest Enemies for ${pokemonName}:`);
+            const weakestEnemies = getWeakestEnemies(pokemonName);
+            console.table(weakestEnemies);
+        }
+
+        function testBestAttackTypesForEnemy() {
+            const inputFieldNomPoke = document.getElementById('inputField');
+            const pokemonName = inputFieldNomPoke.value;
+            console.log(`Test best attack types against ${pokemonName}:`);
+            const bestAttackTypes = getBestAttackTypesForEnemy(pokemonName);
+            console.table(bestAttackTypes);
+        }
 
     </script>
 </body>
